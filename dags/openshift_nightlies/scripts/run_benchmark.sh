@@ -15,7 +15,7 @@ setup(){
     mkdir /home/airflow/workspace
     cd /home/airflow/workspace
     #git clone https://github.com/cloud-bulldozer/e2e-benchmarking
-    git clone -b skipCleanUp https://github.com/mkarg75/e2e-benchmarking.git
+    git clone -b skipCleanUp https://github.com/jdowni000/e2e-benchmarking.git
 
     cp /home/airflow/.kube/config /home/airflow/workspace/kubeconfig
     export KUBECONFIG=/home/airflow/workspace/kubeconfig
@@ -37,6 +37,7 @@ setup(){
 }
 
 run_baremetal_benchmark(){
+
     echo "Baremetal Benchmark will be began.."
     echo "Orchestration host --> $ORCHESTRATION_HOST"
 
@@ -45,11 +46,18 @@ run_baremetal_benchmark(){
     export PRIVATE_KEY=/tmp/perf-dept/ssh_keys/id_rsa_pbench_ec2 
     chmod 600 ${PRIVATE_KEY}
 
+    echo "Transfering the environment variables to the orchestration host"
+    scp -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' -i ${PRIVATE_KEY}  /tmp/environment.txt root@${ORCHESTRATION_HOST}:/tmp/environment_new.txt
+
     echo "Starting e2e script $workload..."
     ssh -t -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' -i ${PRIVATE_KEY} root@${ORCHESTRATION_HOST} << EOF
 
+    source /tmp/environment_new.txt
+    set >> /tmp/compare_env.txt
     export KUBECONFIG=/home/kni/clusterconfigs/auth/kubeconfig
     export BENCHMARK=${TASK_GROUP}
+    # clean up the temporary environment file
+    #rm -rf /tmp/environment.txt
     rm -rf /home/kni/ci_${TASK_GROUP}_workspace
     mkdir /home/kni/ci_${TASK_GROUP}_workspace
     pushd /home/kni/ci_${TASK_GROUP}_workspace
@@ -62,6 +70,7 @@ EOF
 }
 
 if [[ $PLATFORM == "baremetal" ]]; then
+env >> /tmp/environment.txt
 run_baremetal_benchmark
 echo "Finished e2e scripts for $workload"
 else

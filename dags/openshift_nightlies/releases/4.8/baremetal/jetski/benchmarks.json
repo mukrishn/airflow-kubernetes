@@ -29,6 +29,27 @@
                 "ENABLE_SNAPPY_BACKUP": "false",
                 "MULTI_AZ": "false"
             }
-        }
+        },
+	{
+            "name": "nodedensity_test",
+            "workload": "kube-burner",
+            "command": "./run_nodedensity_test_fromgit.sh test_cloud",
+            "env": {
+	        "COMPARE": "false",
+	        "ENABLE_SNAPPY_BACKUP": "false",
+	        "MULTI_AZ": "false",
+	        "PODS_PER_NODE": "2",
+                "NODE_COUNT": "1",
+                "JOB_TIMEOUT": "18000",
+                "QPS": "20",
+                "BURST": "20",
+                "STEP_SIZE": "30s",
+                "METRICS_PROFILE": "metrics.yaml",
+                "LOG_LEVEL": "info",
+                "LOG_STREAMING": "true",
+                "CLEANUP_WHEN_FINISH": "true",
+                "CLEANUP": "true"
+            }
+	}
     ]
 }
