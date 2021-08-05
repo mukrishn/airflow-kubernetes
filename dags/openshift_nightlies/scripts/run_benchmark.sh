@@ -15,7 +15,8 @@ setup(){
     mkdir /home/airflow/workspace
     cd /home/airflow/workspace
     #git clone https://github.com/cloud-bulldozer/e2e-benchmarking
-    git clone -b skipCleanUp https://github.com/mkarg75/e2e-benchmarking.git
+    #git clone -b skipCleanUp https://github.com/jdowni000/e2e-benchmarking.git
+    git clone https://github.com/jdowni000/e2e-benchmarking.git
 
     cp /home/airflow/.kube/config /home/airflow/workspace/kubeconfig
     export KUBECONFIG=/home/airflow/workspace/kubeconfig
@@ -37,6 +38,7 @@ setup(){
 }
 
 run_baremetal_benchmark(){
+
     echo "Baremetal Benchmark will be began.."
     echo "Orchestration host --> $ORCHESTRATION_HOST"
 
@@ -51,6 +53,8 @@ run_baremetal_benchmark(){
     echo "Starting e2e script $workload..."
     ssh -t -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' -i ${PRIVATE_KEY} root@${ORCHESTRATION_HOST} << EOF
 
+    source /tmp/environment_new.txt
+    set >> /tmp/compare_env.txt
     export KUBECONFIG=/home/kni/clusterconfigs/auth/kubeconfig
     export BENCHMARK=${TASK_GROUP}
     while read line; do export \$line; done < /tmp/environment_new.txt

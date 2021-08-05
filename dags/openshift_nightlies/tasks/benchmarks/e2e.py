@@ -102,7 +102,16 @@ class E2EBenchmarks():
         benchmark >> indexer 
 
     def _get_benchmark(self, benchmark):
+        #var = self.vars
+        #print("var dict: ", var)
+        # print ("NODE_COUNT: ", NODE_COUNT)
+        #print ("_get_benchmark vars: ", var)
+        #print ("type of vars: ", type(var))
+        #print ("type of env: ", type(self.env))
         env = {**self.env, **benchmark.get('env', {}), **{"ES_SERVER": var_loader.get_elastic_url()}, **{"KUBEADMIN_PASSWORD": environ.get("KUBEADMIN_PASSWORD", "")}}
+        #print("Environment: ", env)
+        #with open('/environment.txt', 'w') as f:
+        #        print(env, file=f)
         return BashOperator(
             task_id=f"{self.task_group}_{benchmark['name']}",
             depends_on_past=False,
