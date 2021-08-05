@@ -17,7 +17,7 @@
     "openshift_worker_scaleup_target": "2",
     "kubeconfig_path": "/home/kni/clusterconfigs/auth/kubeconfig",
     "webfuse_playbook": "webscale.yml",
-    "webfuse_skiptags": "",
+    "webfuse_skiptags": "bigip",
     "label_node_values": [],
     "local_storage_instances": [],
     "openshift_prometheus_storage_class": "",
