@@ -5,7 +5,7 @@
     "lab_name": "alias",
     "routable_api": false,
     "jumbo_mtu": true,
-    "rebuild_provisioner": false,
+    "rebuild_provisioner": true,
     "foreman_url": "https://foreman.rdu2.scalelab.redhat.com/",
     "baremetal_network_cidr": "10.1.63.0/26",
     "baremetal_network_vlan": "vlan617",
