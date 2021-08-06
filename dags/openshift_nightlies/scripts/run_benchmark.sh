@@ -14,7 +14,8 @@ done
 setup(){
     mkdir /home/airflow/workspace
     cd /home/airflow/workspace
-    git clone https://github.com/cloud-bulldozer/e2e-benchmarking
+    #git clone https://github.com/cloud-bulldozer/e2e-benchmarking
+    git clone -b skipCleanUp https://github.com/mkarg75/e2e-benchmarking.git
 
     cp /home/airflow/.kube/config /home/airflow/workspace/kubeconfig
     export KUBECONFIG=/home/airflow/workspace/kubeconfig
