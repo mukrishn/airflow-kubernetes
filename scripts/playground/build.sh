@@ -4,7 +4,8 @@ usage() { echo "Usage: $0 [-p <string> (airflow password)]" 1>&2; exit 1; }
 GIT_ROOT=$(git rev-parse --show-toplevel)
 source $GIT_ROOT/scripts/common.sh
 _remote_origin_url=$(git config --get remote.origin.url)
-_remote_user=$(git config --get remote.origin.url | cut -d'/' -f4 | tr '[:upper:]' '[:lower:]')
+#_remote_user=$(git config --get remote.origin.url | cut -d'/' -f4 | tr '[:upper:]' '[:lower:]')
+_remote_user=mkarg75
 _raw_branch=$(git branch --show-current)
 _branch=$(git branch --show-current | tr '[:upper:]' '[:lower:]' | sed -r 's/[_]+/-/g')
 _airflow_namespace=$_remote_user-$_branch-airflow
@@ -22,7 +23,6 @@ done
 if [[ -z "$password" ]]; then 
     usage
 fi
-
 
 kubectl create namespace $_airflow_namespace || true
 envsubst < $GIT_ROOT/scripts/playground/templates/airflow.yaml | kubectl apply -f -
