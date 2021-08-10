@@ -102,7 +102,11 @@ class BaremetalOpenshiftNightlyDAG(AbstractOpenshiftNightlyDAG):
         deploy_webfuse = webfuse_installer.get_deploy_app_task()
         scaleup_cluster = bm_installer.get_scaleup_task()
 
+<<<<<<< HEAD
         install_cluster >> scaleup_cluster >> deploy_webfuse
+=======
+        install_cluster >> deploy_webfuse >> scaleup_cluster
+>>>>>>> a491019 (updated DAG)
 
     def _get_openshift_installer(self):
         return jetski.BaremetalOpenshiftInstaller(self.dag, self.release)
