@@ -14,7 +14,7 @@
     "openshift_cluster_name": "",
     "openshift_install_pull_secret": "",
     "openshift_worker_count": "2",
-    "openshift_worker_scaleup_target": "2",
+    "openshift_worker_scaleup_target": "4",
     "kubeconfig_path": "/home/kni/clusterconfigs/auth/kubeconfig",
     "webfuse_playbook": "webscale.yml",
     "webfuse_skiptags": "",
