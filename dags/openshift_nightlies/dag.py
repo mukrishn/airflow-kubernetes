@@ -121,25 +121,3 @@ class OpenstackNightlyDAG(AbstractOpenshiftNightlyDAG):
         if self.config.cleanup_on_success:
             cleanup_cluster = installer.get_cleanup_task()
             install_cluster >> benchmarks >> cleanup_cluster
-        else: 
-            install_cluster >> benchmarks
-
-    def _get_openshift_installer(self):
-        return jetpack.OpenstackJetpackInstaller(self.dag, self.release)
-
-
-
-release_manifest = manifest.Manifest(constants.root_dag_dir)
-for release in release_manifest.get_releases():
-    openshift_release = release["release"]
-    dag_config = release["config"]
-    nightly = None
-    if openshift_release.platform == "baremetal":
-        nightly = BaremetalOpenshiftNightlyDAG(openshift_release, dag_config)
-    elif openshift_release.platform == "openstack":
-        nightly = OpenstackNightlyDAG(openshift_release, dag_config)
-    else:
-        nightly = CloudOpenshiftNightlyDAG(openshift_release, dag_config)
-    
-    nightly.build()
-    globals()[nightly.release_name] = nightly.dag
