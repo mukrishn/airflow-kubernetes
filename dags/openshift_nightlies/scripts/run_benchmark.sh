@@ -59,13 +59,16 @@ run_baremetal_benchmark(){
     if [[ ${workload} == "icni" ]]; then
         git clone -b main https://github.com/redhat-performance/web-burner
         pushd web-burner
-        eval "$command $WORKLOAD_TEMPLATE"
+        eval "$command $WORKLOAD_TEMPLATE $SCALE"
     else
         git clone -b master https://github.com/cloud-bulldozer/e2e-benchmarking.git
         pushd e2e-benchmarking/workloads/$workload
         eval "$command"
     fi
 EOF
+    if [[ $? != 0 ]]; then
+        exit 1
+    fi
 }
 
 if [[ $PLATFORM == "baremetal" ]]; then
