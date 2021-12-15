@@ -1,11 +1,30 @@
 {
     "benchmarks": [
         {
+            "name": "uperf_serviceip_network",
+            "workload": "network-perf",
+            "command": "./run_serviceip_network_test_fromgit.sh test_cloud",
+            "env": {
+                "COMPARE": "false",
+                "ENABLE_SNAPPY_BACKUP": "false",
+                "MULTI_AZ": "false"
+            }
+        },
+        {
+            "name": "icni-node-density",
+            "workload": "icni",
+            "command": "./create_icni2_workload.sh",
+            "env": {
+                "WORKLOAD_TEMPLATE": "workload/cfg_icni2_node_density2.yml",
+                "SCALE": 1
+            }
+        },        
+        {
             "name": "upgrade-cluster",
             "workload": "upgrade-perf",
             "command": "./run_upgrade_fromgit.sh",
             "env": {
-                "TOVERSION": "4.8.3",
+                "TOVERSION": "4.8.16",
                 "MCP_NODE_COUNT": 1
             }
         }        
