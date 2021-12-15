@@ -10,7 +10,7 @@ def get_default_executor_config(dag_config: DagConfig, executor_image='airflow-a
                     containers=[
                         k8s.V1Container(
                             name="base",
-                            image="quay.io/mukrishn/jetski:lastest",
+                            image="quay.io/mukrishn/jetski:latest",
                             image_pull_policy="Always",
                             volume_mounts=[
                                 get_empty_dir_volume_mount()]
