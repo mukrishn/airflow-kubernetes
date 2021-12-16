@@ -16,7 +16,7 @@
             "command": "./create_icni2_workload.sh",
             "env": {
                 "WORKLOAD_TEMPLATE": "workload/cfg_icni2_node_density2.yml",
-                "SCALE": 1
+                "SCALE": "1"
             }
         },        
         {
@@ -25,7 +25,7 @@
             "command": "./run_upgrade_fromgit.sh",
             "env": {
                 "TOVERSION": "4.8.16",
-                "MCP_NODE_COUNT": 1
+                "MCP_NODE_COUNT": "1"
             }
         }        
     ]
