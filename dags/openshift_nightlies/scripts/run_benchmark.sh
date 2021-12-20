@@ -59,7 +59,7 @@ run_baremetal_benchmark(){
     pushd /home/kni/ci_${TASK_GROUP}_workspace
 
     if [[ ${workload} == "icni" ]]; then
-        git clone -b main https://github.com/redhat-performance/web-burner
+        git clone -b delete_templates https://github.com/mukrishn/web-burner
         pushd web-burner
         echo "Running $WORKLOAD_TEMPLATE workload at $SCALE scale"
         eval "$command $WORKLOAD_TEMPLATE $SCALE"

@@ -18,7 +18,16 @@
                 "WORKLOAD_TEMPLATE": "workload/cfg_icni2_node_density2.yml",
                 "SCALE": "1"
             }
-        },        
+        },
+        {
+            "name": "cleanup-icni-node-density",
+            "workload": "icni",
+            "command": "./delete_icni_workload.sh",
+            "env": {
+                "WORKLOAD_TEMPLATE": "workload/cfg_delete_icni2_node_density2.yml",
+                "SCALE": "1"
+            }
+        },
         {
             "name": "upgrade-cluster",
             "workload": "upgrade-perf",
