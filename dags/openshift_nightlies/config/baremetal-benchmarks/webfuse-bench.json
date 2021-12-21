@@ -29,6 +29,24 @@
             }
         },
         {
+            "name": "icni-cluster-density",
+            "workload": "icni",
+            "command": "./create_icni2_workload.sh",
+            "env": {
+                "WORKLOAD_TEMPLATE": "workload/cfg_icni2_cluster_density2.yml",
+                "SCALE": "1"
+            }
+        },
+        {
+            "name": "cleanup-icni-cluster-density",
+            "workload": "icni",
+            "command": "./delete_icni_workload.sh",
+            "env": {
+                "WORKLOAD_TEMPLATE": "workload/cfg_delete_icni2_cluster_density2.yml",
+                "SCALE": "1"
+            }
+        },        
+        {
             "name": "upgrade-cluster",
             "workload": "upgrade-perf",
             "command": "./run_upgrade_fromgit.sh",
