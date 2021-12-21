@@ -33,7 +33,7 @@
             "workload": "upgrade-perf",
             "command": "./run_upgrade_fromgit.sh",
             "env": {
-                "TOVERSION": "4.8.16",
+                "TOVERSION": "4.8.17",
                 "MCP_NODE_COUNT": "1"
             }
         }        
