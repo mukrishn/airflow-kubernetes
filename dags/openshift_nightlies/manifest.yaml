@@ -44,7 +44,7 @@ platforms:
 
   baremetal: 
     build: ga
-    versions: [4.8]
+    versions: [4.8, 4.9]
     variants: 
     - name: jetski
       config: 
