@@ -27,31 +27,13 @@
                 "WORKLOAD_TEMPLATE": "workload/cfg_delete_icni2_node_density2.yml",
                 "SCALE": "1"
             }
-        },
-        {
-            "name": "icni-cluster-density",
-            "workload": "icni",
-            "command": "./create_icni2_workload.sh",
-            "env": {
-                "WORKLOAD_TEMPLATE": "workload/cfg_icni2_cluster_density2.yml",
-                "SCALE": "1"
-            }
-        },
-        {
-            "name": "cleanup-icni-cluster-density",
-            "workload": "icni",
-            "command": "./delete_icni_workload.sh",
-            "env": {
-                "WORKLOAD_TEMPLATE": "workload/cfg_delete_icni2_cluster_density2.yml",
-                "SCALE": "1"
-            }
-        },        
+        },       
         {
             "name": "upgrade-cluster",
             "workload": "upgrade-perf",
             "command": "./run_upgrade_fromgit.sh",
             "env": {
-                "TOVERSION": "4.8.17",
+                "TOVERSION": "4.9.12",
                 "MCP_NODE_COUNT": "1"
             }
         }        
