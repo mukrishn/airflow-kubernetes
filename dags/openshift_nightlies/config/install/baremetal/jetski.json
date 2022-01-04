@@ -20,7 +20,7 @@
     "kubeconfig_path": "/home/kni/clusterconfigs/auth/kubeconfig",
     "jetski_skiptags": "bootorder",
     "webfuse_playbook": "webscale.yml",
-    "webfuse_skiptags": "logging,sctp,cnf,bigip",
+    "webfuse_skiptags": "logging,sctp,cnf,bigip,aspenmesh",
     "label_node_values": [
         {
           "label": "prom: 'true'",
