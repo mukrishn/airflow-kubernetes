@@ -6,11 +6,11 @@ versions:
 - version: 4.8
   alias: stable
   releaseStream: 4.8.0-0.nightly
-  baremetalReleaseStream: latest-4.8
+  baremetalReleaseStream: 4.8.20
 - version: 4.9
   alias: next
   releaseStream: 4.9.0-0.nightly
-  baremetalReleaseStream: latest-4.9
+  baremetalReleaseStream: 4.9.10
 - version: "4.10"
   alias: future
   releaseStream: 4.10.0-0.nightly
@@ -81,8 +81,8 @@ platforms:
         benchmarks: acs.json
 
   baremetal: 
-    build: dev
-    versions: [4.9]
+    build: ga
+    versions: [4.8, 4.9, "4.10"]
     variants: 
     - name: jetski
       config: 
