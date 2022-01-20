@@ -20,7 +20,7 @@
   "kubeconfig_path": "/home/kni/clusterconfigs/auth/kubeconfig",
   "jetski_skiptags": "bootorder",
   "webfuse_playbook": "webscale.yml",
-  "webfuse_skiptags": "logging,sctp,cnf,aspenmesh",
+  "webfuse_skiptags": "logging,sctp,cnf,aspenmesh,bigip",
   "label_node_values": [],
   "local_storage_instances": [],
   "openshift_prometheus_storage_class": "",
