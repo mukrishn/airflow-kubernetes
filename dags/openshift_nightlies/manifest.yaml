@@ -14,7 +14,7 @@ versions:
 - version: "4.10"
   alias: future
   releaseStream: 4.10.0-0.nightly
-  baremetalReleaseStream: latest-4.10
+  baremetalReleaseStream: 4.10.0-fc.2
 
 dagConfig:
   schedules:
