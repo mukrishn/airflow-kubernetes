@@ -33,6 +33,6 @@
   "ansible_ssh_key": "/tmp/JetSki/perf-dept/ssh_keys/id_rsa_pbench_ec2",
   "ipv6_enabled": true,
   "ipv4_provisioning": true,
-  "ipv4_baremetal": true,
-  "dualstack_baremetal": false
+  "ipv4_baremetal": false,
+  "dualstack_baremetal": true
 }
