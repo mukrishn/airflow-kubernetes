@@ -42,8 +42,8 @@ platforms:
         benchmarks: control-plane.json
 
   baremetal: 
-    build: ga
-    versions: [4.8, 4.9]
+    build: dev
+    versions: [4.8, 4.9, "4.10"]
     variants: 
     - name: jetski
       config: 

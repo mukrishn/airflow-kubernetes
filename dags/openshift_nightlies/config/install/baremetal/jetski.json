@@ -30,5 +30,9 @@
   "bigip_bridge_int": "ens2f1",
   "bigip_password": "",
   "ontap_password": "",
-  "ansible_ssh_key": "/tmp/JetSki/perf-dept/ssh_keys/id_rsa_pbench_ec2"
+  "ansible_ssh_key": "/tmp/JetSki/perf-dept/ssh_keys/id_rsa_pbench_ec2",
+  "ipv6_enabled": "True",
+  "ipv4_provisioning": "True",
+  "ipv4_baremetal": "True",
+  "dualstack_baremetal": "False"
 }
