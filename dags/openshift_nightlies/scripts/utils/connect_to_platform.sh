@@ -14,10 +14,22 @@ generate_external_labels(){
 
 
 install_grafana_agent(){
+    if [[ $(oc get project | grep grafana-agent) ]]; then
+        echo "Delete existing resources and namespace"
+        oc delete project grafana-agent --force
+        # wait for few sec to finish deleting
+        sleep 15
+    fi
     envsubst < $SCRIPT_DIR/templates/grafana-agent.yaml | kubectl apply -f -
 }
 
 install_promtail(){
+    if [[ $(oc get project | grep loki) ]]; then
+        echo "Delete existing resources and namespace"
+        oc delete project loki --force
+        # wait for few sec to finish deleting
+        sleep 15
+    fi    
     helm repo add grafana https://grafana.github.io/helm-charts 
     helm repo update
     oc create namespace loki || true
@@ -53,9 +65,9 @@ bm_setup(){
     scp -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' -i ${PRIVATE_KEY} -r /tmp/environment_new.txt root@${ORCHESTRATION_HOST}:/tmp/
     scp -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' -i ${PRIVATE_KEY} -r /tmp/${AIRFLOW_CTX_DAG_ID} root@${ORCHESTRATION_HOST}:/tmp/
 
-    ssh -t -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' -i ${PRIVATE_KEY} root@${ORCHESTRATION_HOST} << EOF
+    ssh -t -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' -i ${PRIVATE_KEY} root@${ORCHESTRATION_HOST} << 'EOF'
     export KUBECONFIG=/home/kni/clusterconfigs/auth/kubeconfig
-    while read line; do export \$line; done < /tmp/environment_new.txt
+    while read line; do export $line; done < /tmp/environment_new.txt
     # clean up the temporary environment file
     rm -rf /tmp/environment_new.txt
 
@@ -67,6 +79,12 @@ bm_setup(){
     export DAG_ID=${AIRFLOW_CTX_DAG_ID}
     
     # Install grafana agent
+    if [[ $(oc get project | grep grafana-agent) ]]; then
+        echo "Delete existing resources and namespace"
+        oc delete project grafana-agent --force
+        # wait for few sec to finish deleting
+        sleep 15
+    fi
     envsubst < /tmp/${AIRFLOW_CTX_DAG_ID}/grafana-agent.yaml | kubectl apply -f -
     
     # Install Helm
@@ -76,6 +94,12 @@ bm_setup(){
     cp linux-386/helm /usr/local/bin --update
 
     # Install promtail
+    if [[ $(oc get project | grep loki) ]]; then
+        echo "Delete existing resources and namespace"
+        oc delete project loki --force
+        # wait for few sec to finish deleting
+        sleep 15
+    fi    
     helm repo add grafana https://grafana.github.io/helm-charts 
     helm repo update
     oc create namespace loki || true
@@ -88,7 +112,7 @@ EOF
     fi
 }
 
-if [[ $PLATFORM == "baremetal" ]]; then
+if [[ $REL_PLATFORM == "baremetal" ]]; then
     bm_setup
 else
     setup

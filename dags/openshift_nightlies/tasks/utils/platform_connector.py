@@ -20,7 +20,7 @@ class PlatformConnectorTask():
 
         # Specific Task Configuration
         self.env = {
-            "PLATFORM": self.release.platform,
+            "REL_PLATFORM": self.release.platform,
             "THANOS_RECEIVER_URL": var_loader.get_secret("thanos_receiver_url"),
             "LOKI_RECEIVER_URL": var_loader.get_secret("loki_receiver_url")
         }
