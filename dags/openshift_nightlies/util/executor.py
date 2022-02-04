@@ -10,7 +10,7 @@ def get_default_executor_config(dag_config: DagConfig, executor_image='airflow-a
                     containers=[
                         k8s.V1Container(
                             name="base",
-                            image=f"{dag_config.executor_image['repository']}/{executor_image}:{dag_config.executor_image['tag']}",
+                            image="quay.io/mkarg/cloud-bulldozer:latest",
                             image_pull_policy="Always",
                             volume_mounts=[
                                 get_empty_dir_volume_mount()]
