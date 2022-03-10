@@ -1,7 +1,7 @@
 {
   "provisioner_user": "kni",
-  "provisioner_hostname": "e16-h12-b02-fc640.rdu2.scalelab.redhat.com",
-  "cloud_name": "cloud18",
+  "provisioner_hostname": "e21-h24-b01-fc640.rdu2.scalelab.redhat.com",
+  "cloud_name": "cloud28",
   "lab_name": "scale",
   "routable_api": false,
   "jumbo_mtu": true,
@@ -14,9 +14,9 @@
   "openshift_cluster_name": "",
   "openshift_install_pull_secret": "",
   "openshift_worker_count": "2",
-  "openshift_worker_scaleup_target": "118",
+  "openshift_worker_scaleup_target": "3",
   "power_off_lab": true,
-  "openshift_worker_scale_step": "118",
+  "openshift_worker_scale_step": "3",
   "kubeconfig_path": "/home/kni/clusterconfigs/auth/kubeconfig",
   "jetski_skiptags": "bootorder",
   "webfuse_playbook": "webscale.yml",
@@ -31,8 +31,8 @@
   "bigip_password": "",
   "ontap_password": "",
   "ansible_ssh_key": "/tmp/JetSki/perf-dept/ssh_keys/id_rsa_pbench_ec2",
-  "ipv6_enabled": true,
+  "ipv6_enabled": false,
   "ipv4_provisioning": true,
   "ipv4_baremetal": false,
-  "dualstack_baremetal": true
+  "dualstack_baremetal": false
 }
