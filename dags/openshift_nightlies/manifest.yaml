@@ -77,13 +77,18 @@ platforms:
         benchmarks: acs.json
 
   baremetal: 
-    build: ga
-    versions: ["4.10"]
+    build: dev
+    versions: ["4.10", 4.11]
     variants: 
-    - name: jetski
+    - name: sdn
       config: 
+        install: baremetal/jetski-sdn.json
+        benchmarks: baremetal-benchmarks-regular
+    - name: ovn
+      config:
         install: baremetal/jetski.json
-        benchmarks: baremetal-benchmarks
+        benchmarks: baremetal-benchmarks-regular
+
 
   openstack:
     versions: [4.9, "4.10"]
