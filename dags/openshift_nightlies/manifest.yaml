@@ -10,7 +10,7 @@ versions:
 - version: 4.11
   alias: future
   releaseStream: 4.11.0-0.nightly
-  baremetalReleaseStream: 4.11.0-0.nightly-2022-03-27-140854
+  baremetalReleaseStream: 4.11.0-0.nightly-2022-04-07-053433
 
 dagConfig:
   schedules:
