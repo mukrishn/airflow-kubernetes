@@ -1,14 +1,14 @@
 versions:
 - version: 4.9
-  alias: previous
+  alias: stable
   releaseStream: 4.9.0-0.nightly
   baremetalReleaseStream: latest-4.9
 - version: "4.10"
-  alias: stable
-  releaseStream: 4.10.0-0.nightly
-  baremetalReleaseStream: latest-4.10
-- version: 4.11
   alias: next
+  releaseStream: 4.10.0-0.nightly
+  baremetalReleaseStream: 4.10.3
+- version: 4.11
+  alias: future
   releaseStream: 4.11.0-0.nightly
   baremetalReleaseStream: latest-4.11
 
@@ -28,7 +28,7 @@ dagConfig:
 
 platforms:
   cloud:
-    versions: ["4.10", 4.11]
+    versions: [4.9, "4.10", 4.11]
     providers: ["aws", "gcp", "azure"]
     variants: 
     - name: sdn-control-plane
@@ -78,12 +78,17 @@ platforms:
 
   baremetal: 
     build: dev
-    versions: [4.9]
+    versions: ["4.10", 4.11]
     variants: 
-    - name: jetski
+    - name: sdn
       config: 
+        install: baremetal/jetski-sdn.json
+        benchmarks: baremetal-benchmarks-regular
+    - name: ovn
+      config:
         install: baremetal/jetski.json
-        benchmarks: baremetal-benchmarks
+        benchmarks: baremetal-benchmarks-regular
+
 
   openstack:
     versions: [4.9, "4.10"]
@@ -99,7 +104,7 @@ platforms:
 
 # Do not program concurrent builds of ROSA/ROGCP/ARO
   rosa:
-    versions: ["4.10", 4.11]
+    versions: [4.9, "4.10", 4.11]
     variants:
       - name: sdn-control-plane
         schedule:  "0 12 * * 1,3,5"
@@ -122,7 +127,7 @@ platforms:
           install: rosa/ovn.json
           benchmarks: data-plane.json
   rogcp:
-    versions: ["4.10", 4.11]
+    versions: [4.9, "4.10", 4.11]
     variants:
       - name: sdn-control-plane
         schedule:  "20 12 * * 1,3,5"
@@ -136,7 +141,7 @@ platforms:
           benchmarks: data-plane.json
 
   hypershift:
-    versions: ["4.10", 4.11]
+    versions: [4.9, "4.10", 4.11]
     variants:
       - name: sdn-control-plane
         schedule:  "0 12 * * 1,3,5"
@@ -160,14 +165,3 @@ platforms:
         config: 
           install: None
           benchmarks: data-plane.json
-      - name: ovn-control-plane
-        schedule:  "0 12 * * 1,3,5"
-        config:
-          install: rogcp/ovn.json
-          benchmarks: control-plane.json
-      - name: ovn-data-plane
-        schedule: "0 12 * * 1"
-        config:
-          install: rogcp/ovn.json
-          benchmarks: data-plane.json
-

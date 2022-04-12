@@ -1,69 +1,30 @@
 {
     "benchmarks": [
-
         {
-            "name": "uperf-serviceip-network",
+            "name": "host-network",
             "workload": "network-perf",
             "command": "./run.sh",
             "env": {
-                "WORKLOAD": "pod2svc",
-                "COMPARE": "false",
-                "ENABLE_SNAPPY_BACKUP": "false",
-                "MULTI_AZ": "false"
+                "WORKLOAD": "hostnet",
+                "PAIRS": "1"
             }
         },
         {
-            "name": "node-density",
-            "workload": "kube-burner",
+            "name": "pod-network",
+            "workload": "network-perf",
             "command": "./run.sh",
             "env": {
-                "WORKLOAD": "node-density",
-                "PODS_PER_NODE": "245",
-                "NODE_COUNT": "27",
-                "JOB_TIMEOUT": "18000",
-                "QPS": "20",
-                "BURST": "20",
-                "STEP_SIZE": "30s",
-                "LOG_LEVEL": "info",
-                "LOG_STREAMING": "true",
-                "CLEANUP_WHEN_FINISH": "true",
-                "CLEANUP": "true",
-                "MUST_GATHER_EACH_TASK": "true"
+                "WORKLOAD": "pod2pod"
             }
         },
         {
-            "name": "cluster-density",
-            "workload": "kube-burner",
+            "name": "serviceip-network",
+            "workload": "network-perf",
             "command": "./run.sh",
             "env": {
-                "WORKLOAD": "cluster-density",
-                "JOB_ITERATIONS": "500",
-                "JOB_TIMEOUT": "18000",
-                "STEP_SIZE": "30s",
-                "QPS": "20",
-                "BURST": "20",
-                "LOG_LEVEL": "info",
-                "LOG_STREAMING": "true",
-                "CLEANUP_WHEN_FINISH": "true",
-                "CLEANUP": "true",
-                "MUST_GATHER_EACH_TASK": "true"
+                "WORKLOAD": "pod2svc"
             }
-        },                
-        {
-            "name": "testpmd",
-            "workload": "testpmd",
-                "command": "./run_testpmd_test_fromgit.sh test_cloud"
-        },
-        {
-            "name": "oslat",
-            "workload": "oslat",
-                "command": "./run_oslat_test_fromgit.sh test_cloud"
-        },
-        {	
-            "name": "cyclictest",
-            "workload": "cyclictest",
-                "command": "./run_cyclictest_test_fromgit.sh test_cloud"
-        },        
+        },               
         {
             "name": "icni-node-density",
             "workload": "icni",
@@ -83,66 +44,12 @@
             }
         },
         {
-            "name": "icni-node-density2",
-            "workload": "icni",
-            "command": "./create_icni2_workload.sh",
-            "env": {
-                "WORKLOAD_TEMPLATE": "workload/cfg_icni2_node_density2.yml",
-                "SCALE": "2"
-            }
-        },
-        {
-            "name": "cleanup-icni-node-density2",
-            "workload": "icni",
-            "command": "./delete_icni_workload.sh",
-            "env": {
-                "WORKLOAD_TEMPLATE": "workload/cfg_delete_icni2_node_density2.yml",
-                "SCALE": "2"
-            }
-        },        
-        {
-            "name": "icni-cluster-density",
-            "workload": "icni",
-            "command": "./create_icni2_workload.sh",
-            "env": {
-                "WORKLOAD_TEMPLATE": "workload/cfg_icni2_cluster_density2.yml",
-                "SCALE": "1"
-            }
-        },
-        {
-            "name": "cleanup-icni-cluster-density",
-            "workload": "icni",
-            "command": "./delete_icni_workload.sh",
-            "env": {
-                "WORKLOAD_TEMPLATE": "workload/cfg_delete_icni2_cluster_density2.yml",
-                "SCALE": "1"
-            }
-        },        
-        {
-            "name": "icni-cluster-density2",
-            "workload": "icni",
-            "command": "./create_icni2_workload.sh",
-            "env": {
-                "WORKLOAD_TEMPLATE": "workload/cfg_icni2_cluster_density2.yml",
-                "SCALE": "2"
-            }
-        },
-        {
-            "name": "cleanup-icni-cluster-density2",
-            "workload": "icni",
-            "command": "./delete_icni_workload.sh",
-            "env": {
-                "WORKLOAD_TEMPLATE": "workload/cfg_delete_icni2_cluster_density2.yml",
-                "SCALE": "2"
-            }            
-        },        
-        {
             "name": "upgrade-cluster",
             "workload": "upgrade-perf",
             "command": "./run_upgrade_fromgit.sh",
             "env": {
                 "LATEST": "true",
-                "MCP_NODE_COUNT": "2"
+                "MCP_NODE_COUNT": "20"
             }
         }        
     ]

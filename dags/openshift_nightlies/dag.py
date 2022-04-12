@@ -141,7 +141,7 @@ class BaremetalOpenshiftNightlyDAG(AbstractOpenshiftNightlyDAG):
         return e2e.E2EBenchmarks(self.dag, self.config, self.release, task_group)
 
     def _add_benchmarks(self, task_group):
-        with TaskGroup(task_group, prefix_group_id=True, dag=self.dag) as benchmarks:
+        with TaskGroup(task_group, prefix_group_id=False, dag=self.dag) as benchmarks:
             benchmark_tasks = self._get_e2e_benchmarks(task_group).get_benchmarks()
             chain(*benchmark_tasks)
         return benchmarks
@@ -213,27 +213,13 @@ class HypershiftNightlyDAG(AbstractOpenshiftNightlyDAG):
         mgmt_installer = self._get_openshift_installer()
         hosted_installer = self._get_hypershift_openshift_installer()
         install_mgmt_cluster = mgmt_installer.get_install_task()
-        connect_to_platform = self._get_platform_connector().get_task()
 
         rosa_post_installation = self._get_rosa_postinstall_setup()._get_rosa_postinstallation()
 
-        if self.config.cleanup_on_success:
-            install_hosted_cluster = hosted_installer.get_hosted_install_task()
-            cleanup_mgmt_cluster = mgmt_installer.get_cleanup_task()
-            cleanup_hosted_cluster = hosted_installer.get_cleanup_task()
-            for c_id, install_hc in install_hosted_cluster:
-                benchmark = self._add_benchmarks(task_group=c_id)
-                hc_connect_to_platform = self._get_hc_platform_connector(task_group=c_id).get_task()            
-                install_mgmt_cluster >> rosa_post_installation >> connect_to_platform
-                connect_to_platform >> install_hc >> [hc_connect_to_platform, benchmark]
-                [hc_connect_to_platform, benchmark] >> cleanup_hosted_cluster >> cleanup_mgmt_cluster
-        else:
-            install_hosted_cluster = hosted_installer.get_hosted_install_task()
-            for c_id, install_hc in install_hosted_cluster:
-                benchmark = self._add_benchmarks(task_group=c_id)
-                hc_connect_to_platform = self._get_hc_platform_connector(task_group=c_id).get_task()            
-                install_mgmt_cluster >> rosa_post_installation >> connect_to_platform
-                connect_to_platform >> install_hc >> hc_connect_to_platform >> benchmark
+        install_hosted_cluster = hosted_installer.get_hosted_install_task()
+        for c_id, cluster in install_hosted_cluster:
+            benchmark = self._add_benchmarks(task_group=c_id)
+            install_mgmt_cluster >> rosa_post_installation >> cluster >> benchmark
 
     def _get_openshift_installer(self):
         return rosa.RosaInstaller(self.dag, self.config, self.release)
@@ -249,9 +235,6 @@ class HypershiftNightlyDAG(AbstractOpenshiftNightlyDAG):
             benchmark_tasks = self._get_e2e_benchmarks(task_group).get_benchmarks()
             chain(*benchmark_tasks)
         return benchmarks
-
-    def _get_hc_platform_connector(self, task_group):
-        return platform_connector.PlatformConnectorTask(self.dag, self.config, self.release, task_group=task_group)
 
 class PrebuiltOpenshiftNightlyDAG(AbstractOpenshiftNightlyDAG):
     def __init__(self, Release: OpenshiftRelease, Config: DagConfig):
