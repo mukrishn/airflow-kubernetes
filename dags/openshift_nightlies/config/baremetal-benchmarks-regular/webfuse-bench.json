@@ -1,46 +1,6 @@
 {
     "benchmarks": [
         {
-            "name": "host-network",
-            "workload": "network-perf",
-            "command": "./run.sh",
-            "env": {
-                "WORKLOAD": "hostnet",
-                "PAIRS": "1"
-            }
-        },
-        {
-            "name": "pod-network",
-            "workload": "network-perf",
-            "command": "./run.sh",
-            "env": {
-                "WORKLOAD": "pod2pod"
-            }
-        },
-        {
-            "name": "serviceip-network",
-            "workload": "network-perf",
-            "command": "./run.sh",
-            "env": {
-                "WORKLOAD": "pod2svc"
-            }
-        },
-        {
-            "name": "router",
-            "workload": "router-perf-v2",
-            "command": "./ingress-performance.sh",
-            "env": {
-                "THROUGHPUT_TOLERANCE": "10",
-                "LATENCY_TOLERANCE": "10",
-                "LARGE_SCALE_THRESHOLD": "19",
-                "ENGINE": "local",
-                "LARGE_SCALE_ROUTES": "400",
-                "COMPARE": "false",
-                "EMAIL_ID_FOR_RESULTS_SHEET": "msheth@redhat.com",
-                "GSHEET_KEY_LOCATION": "/tmp/key.json"
-            }
-        },
-        {
             "name": "node-density",
             "workload": "kube-burner",
             "command": "./run.sh",
@@ -150,6 +110,46 @@
                 "CHANNEL": "nightlies",
                 "TIMEOUT": "400",
                 "POLL_INTERVAL": "10"
+            }
+        },
+        {
+            "name": "host-network",
+            "workload": "network-perf",
+            "command": "./run.sh",
+            "env": {
+                "WORKLOAD": "hostnet",
+                "PAIRS": "1"
+            }
+        },
+        {
+            "name": "pod-network",
+            "workload": "network-perf",
+            "command": "./run.sh",
+            "env": {
+                "WORKLOAD": "pod2pod"
+            }
+        },
+        {
+            "name": "serviceip-network",
+            "workload": "network-perf",
+            "command": "./run.sh",
+            "env": {
+                "WORKLOAD": "pod2svc"
+            }
+        },
+        {
+            "name": "router",
+            "workload": "router-perf-v2",
+            "command": "./ingress-performance.sh",
+            "env": {
+                "THROUGHPUT_TOLERANCE": "10",
+                "LATENCY_TOLERANCE": "10",
+                "LARGE_SCALE_THRESHOLD": "19",
+                "ENGINE": "local",
+                "LARGE_SCALE_ROUTES": "400",
+                "COMPARE": "false",
+                "EMAIL_ID_FOR_RESULTS_SHEET": "msheth@redhat.com",
+                "GSHEET_KEY_LOCATION": "/tmp/key.json"
             }
         }
     ]
