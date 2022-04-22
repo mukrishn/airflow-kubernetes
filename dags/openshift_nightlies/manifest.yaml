@@ -80,15 +80,18 @@ platforms:
     build: dev
     versions: ["4.10", 4.11]
     variants: 
-    - name: sdn
+    - name: sdn-regular
       config: 
         install: baremetal/jetski-sdn.json
         benchmarks: baremetal-benchmarks-regular
-    - name: ovn
+    - name: ovn-regular
       config:
         install: baremetal/jetski.json
         benchmarks: baremetal-benchmarks-regular
-
+    - name: icni2
+      config:
+        install: baremetal/jetski.json
+        benchmarks: baremetal-benchmarks
 
   openstack:
     versions: [4.9, "4.10"]
