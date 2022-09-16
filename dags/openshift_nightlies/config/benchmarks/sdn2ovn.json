@@ -1,0 +1,55 @@
+{
+    "benchmarks": [
+        {
+            "name": "node-density-cni-sdn",
+            "workload": "kube-burner",
+            "trigger_rule": "all_done",
+            "command": "./run.sh",
+            "env": {
+                "WORKLOAD": "node-density-cni",
+                "PODS_PER_NODE": "245",
+                "NODE_COUNT": "24",
+                "JOB_TIMEOUT": "18000",
+                "QPS": "20",
+                "BURST": "20",
+                "STEP_SIZE": "30s",
+                "LOG_LEVEL": "info",
+                "CLEANUP_WHEN_FINISH": "false",
+                "CLEANUP": "true",
+                "MUST_GATHER_EACH_TASK": "true",
+                "CLEANUP_TIMEOUT": "1h",
+                "NODE_SELECTOR": "{node-role.kubernetes.io/workload: }"
+            }
+        },
+        {
+            "name": "network-migration",
+            "workload": "sdn2ovn",
+            "trigger_rule": "all_done",
+            "command": "./run.sh",
+            "env": {
+                "MAX_UNAVAILABLE_WORKER": "1"
+            }
+        },
+        {
+            "name": "node-density-cni-ovn",
+            "workload": "kube-burner",
+            "trigger_rule": "all_done",
+            "command": "./run.sh",
+            "env": {
+                "WORKLOAD": "node-density-cni",
+                "PODS_PER_NODE": "245",
+                "NODE_COUNT": "24",
+                "JOB_TIMEOUT": "18000",
+                "QPS": "20",
+                "BURST": "20",
+                "STEP_SIZE": "30s",
+                "LOG_LEVEL": "info",
+                "CLEANUP_WHEN_FINISH": "true",
+                "CLEANUP": "true",
+                "MUST_GATHER_EACH_TASK": "true",
+                "CLEANUP_TIMEOUT": "1h",
+                "NODE_SELECTOR": "{node-role.kubernetes.io/workload: }"
+            }
+        }        
+    ]
+}
