@@ -156,6 +156,23 @@ _balance_infra(){
                 exit 1
         fi
     done
+
+    echo "Initiate migration of ingress router-default pods to infra nodepools"
+    echo "Add toleration to use infra nodes"
+    oc patch ingresscontroller -n openshift-ingress-operator default --type merge --patch  '{"spec":{"nodePlacement":{"nodeSelector":{"matchLabels":{"node-role.kubernetes.io/infra":""}},"tolerations":[{"effect":"NoSchedule","key":"node-role.kubernetes.io/infra","operator":"Exists"}]}}}'
+    echo "Wait till it gets rolled out"
+    sleep 60
+    oc get pods -n openshift-ingress -o wide
+    for node in $(oc get pods -n openshift-ingress -o wide | grep -i router | grep -i running | awk '{print$7}');
+    do
+        if [[ $(oc get nodes | grep infra | awk '{print$1}' | grep $node) != "" ]]; then
+                echo "$node is an infra node"
+        else
+                echo "ERROR: router-default pod on $node is not an infra node"
+                exit 1
+        fi
+    done
+    
     return 0
 }
 
