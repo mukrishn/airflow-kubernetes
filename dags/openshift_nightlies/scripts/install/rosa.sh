@@ -103,7 +103,6 @@ _login_check(){
                 DURATION=$(($CURRENT_TIMER - $START_TIMER))
                 INDEXDATA+=("cluster_admin_login-${DURATION}")
                 _adm_logic_check $1 $2
-                oc logout
                 return 0
             else
                 echo "Rechecking login for $((10-$RECHECK)) more times"
@@ -587,20 +586,21 @@ postinstall(){
         ocm patch /api/clusters_mgmt/v1/clusters/"$(_get_cluster_id ${CLUSTER_NAME})" <<< ${EXPIRATION_STRING}
         echo "Cluster is ready, deleting OSD access keys now.."
         aws iam delete-access-key --user-name OsdCcsAdmin --access-key-id $AWS_ACCESS_KEY_ID || true
+        kubectl delete secret ${KUBEADMIN_NAME} || true
+        kubectl create secret generic ${KUBEADMIN_NAME} --from-literal=KUBEADMIN_PASSWORD=${PASSWORD}        
     else
         URL=$(rosa describe cluster -c $CLUSTER_NAME --output json | jq -r ".api.url")
         START_TIMER=$(date +%s)      
         PASSWORD=$(rosa create admin -c "$(_get_cluster_id ${CLUSTER_NAME})" -y 2>/dev/null | grep "oc login" | awk '{print $7}')
         CURRENT_TIMER=$(date +%s)
         DURATION=$(($CURRENT_TIMER - $START_TIMER))
-        INDEXDATA+=("cluster_admin_create-${DURATION}")  
+        INDEXDATA+=("cluster_admin_create-${DURATION}")
+        kubectl delete secret ${KUBEADMIN_NAME} || true
+        kubectl create secret generic ${KUBEADMIN_NAME} --from-literal=KUBEADMIN_PASSWORD=${PASSWORD}          
         if [ $HCP == "true" ]; then _login_check $URL $PASSWORD; fi
         # set expiration to 24h
         rosa edit cluster -c "$(_get_cluster_id ${CLUSTER_NAME})" --expiration=${EXPIRATION_TIME}m
     fi
-    unset KUBECONFIG
-    kubectl delete secret ${KUBEADMIN_NAME} || true
-    kubectl create secret generic ${KUBEADMIN_NAME} --from-literal=KUBEADMIN_PASSWORD=${PASSWORD}
     if [ $HCP == "true" ]; then index_metadata "cluster-install"; fi
     return 0
 }
