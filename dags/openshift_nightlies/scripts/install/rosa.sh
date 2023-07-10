@@ -103,6 +103,7 @@ _login_check(){
                 DURATION=$(($CURRENT_TIMER - $START_TIMER))
                 INDEXDATA+=("cluster_admin_login-${DURATION}")
                 _adm_logic_check $1 $2
+                oc logout
                 return 0
             else
                 echo "Rechecking login for $((10-$RECHECK)) more times"
