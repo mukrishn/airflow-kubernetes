@@ -41,9 +41,8 @@ class Diagnosis():
 
         super().__init__()
 
-        self.exec_config = executor.get_executor_config_with_cluster_access(self.config, self.release, executor_image="airflow-managed-services")
-
     def _get_rosa_postinstallation(self, operation="postinstall", id="", trigger_rule="all_success"):
+        self.exec_config = executor.get_executor_config_with_cluster_access(self.config, self.release, executor_image="airflow-managed-services", task_group=id)
         task_prefix=f"{id}-"
         return BashOperator(
             task_id=f"{task_prefix if id != '' else ''}{operation}-rosa",
