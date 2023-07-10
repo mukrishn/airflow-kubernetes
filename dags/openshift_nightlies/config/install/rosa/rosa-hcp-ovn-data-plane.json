@@ -10,7 +10,7 @@
     "ocm_cli_version": "v0.1.67",
     "ocm_environment": "stage",
     "managed_channel_group": "nightly",
-    "managed_ocp_version": "4.13.0-0.nightly-2023-07-10-040253",
+    "managed_ocp_version": "latest",
     "openshift_worker_count": 9,
     "openshift_network_type": "OVNKubernetes",
     "openshift_worker_instance_type": "m5.2xlarge",
