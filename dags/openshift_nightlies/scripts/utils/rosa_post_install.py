@@ -35,6 +35,7 @@ def _aws_config(clustername,jsonfile):
     print(clustername_check_cmd)
     process = subprocess.Popen(clustername_check_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=my_env)
     stdout,stderr = process.communicate()
+    print(stdout)
     clustername = stdout.decode("utf-8")
     vpc_cmd = ["aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress,PublicIpAddress, PrivateDnsName, VpcId]' --output text | column -t | grep " + clustername + "| awk '{print $7}' | grep -v '^$' | sort -u"]
     print(vpc_cmd)
