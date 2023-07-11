@@ -28,14 +28,14 @@ def _aws_config(clustername,jsonfile,kubeconfig):
     my_env = os.environ.copy()
     my_env['AWS_ACCESS_KEY_ID'] = json_file['aws_access_key_id']
     my_env['AWS_SECRET_ACCESS_KEY'] = json_file['aws_secret_access_key']
-    my_env['AWS_DEFAULT_REGION'] = json_file['aws_region_for_openshift']
+    my_env['AWS_DEFAULT_REGION'] = json_file['aws_region']
     if "rosa_hcp" in json_file and json_file["rosa_hcp"] == "true":
         clustername_check_cmd = ["oc get infrastructures.config.openshift.io cluster -o json --kubeconfig " + kubeconfig + " | jq -r '.status.platformStatus.aws.resourceTags[] | select( .key == \"api.openshift.com/name\" ).value'"]
         print(clustername_check_cmd)
         process = subprocess.Popen(clustername_check_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=my_env)
         stdout,stderr = process.communicate()
         clustername = stdout.decode("utf-8").replace('\n','').replace(' ','')     
-    vpc_cmd = ["aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress,PublicIpAddress, PrivateDnsName, VpcId]' --output text"] # | column -t | grep " + clustername + "| awk '{print $7}' | grep -v '^$' | sort -u"]
+    vpc_cmd = ["aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress,PublicIpAddress, PrivateDnsName, VpcId]' --output text | column -t | grep " + clustername + "| awk '{print $7}' | grep -v '^$' | sort -u"]
     print(vpc_cmd)
     process = subprocess.Popen(vpc_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=my_env)
     stdout,stderr = process.communicate()
