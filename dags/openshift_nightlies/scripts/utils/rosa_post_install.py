@@ -32,6 +32,7 @@ def _aws_config(clustername,jsonfile):
     # Grepping cluster name from rosa list cluster again, it is needed for hosted-cp cluster(oc get infrastructure from L104 only returns clusterID)
     # like rosa list cluster | grep 24t1h01qq8mo77nv4nhi30ek9fiii4ac | awk '{print$2}' gets perf-195-hcp-1
     clustername_check_cmd = ["rosa list cluster | grep " + clustername + " | awk '{print$2}' "]
+    print(clustername_check_cmd)
     process = subprocess.Popen(clustername_check_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=my_env)
     stdout,stderr = process.communicate()
     clustername = stdout.decode("utf-8")
