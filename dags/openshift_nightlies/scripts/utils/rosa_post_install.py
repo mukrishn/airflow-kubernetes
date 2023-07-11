@@ -35,16 +35,14 @@ def _aws_config(clustername,jsonfile,kubeconfig):
         process = subprocess.Popen(clustername_check_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=my_env)
         stdout,stderr = process.communicate()
         clustername = stdout.decode("utf-8").replace('\n','').replace(' ','')     
-    vpc_cmd = ["aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress,PublicIpAddress, PrivateDnsName, VpcId]' --output text | column -t | grep " + clustername + "| awk '{print $7}' | grep -v '^$' | sort -u"]
+    vpc_cmd = ["aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress,PublicIpAddress, PrivateDnsName, VpcId]' --output text"] # | column -t | grep " + clustername + "| awk '{print $7}' | grep -v '^$' | sort -u"]
     print(vpc_cmd)
     process = subprocess.Popen(vpc_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=my_env)
     stdout,stderr = process.communicate()
     print("VPC:")
     print(stdout)
     print(stderr)
-    cluster_vpc = stdout.decode("utf-8")
-    cluster_vpc = cluster_vpc.replace('\n','')
-    cluster_vpc = cluster_vpc.replace(' ','')
+    cluster_vpc = stdout.decode("utf-8").replace('\n','').replace(' ','')
     sec_grp_cmd = ["aws ec2 describe-security-groups --filters \"Name=vpc-id,Values=" + cluster_vpc + "\" --output json | jq .SecurityGroups[].GroupId"]
     print(sec_grp_cmd)
     process = subprocess.Popen(sec_grp_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=my_env)
@@ -52,11 +50,8 @@ def _aws_config(clustername,jsonfile,kubeconfig):
     print("Security Groups:")
     print(stdout)
     print(stderr)
-    sec_group = stdout.decode("utf-8")
+    sec_group = stdout.decode("utf-8").replace(' ','').replace('"','').replace('\n',' ')
 
-    sec_group = sec_group.replace(' ','')
-    sec_group = sec_group.replace('"','')
-    sec_group = sec_group.replace('\n',' ')
     sec_group_list = list(sec_group.split(" "))
     print(sec_group_list)
 
