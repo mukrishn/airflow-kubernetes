@@ -11,8 +11,6 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from kubernetes import client, config
-from openshift.dynamic import DynamicClient
 import sys
 import argparse
 import subprocess
@@ -20,7 +18,7 @@ import os
 import json
 
 # Make aws related config changes such as security group rules etc
-def _aws_config(nodes,clustername,jsonfile):
+def _aws_config(clustername,jsonfile):
     try:
         json_file = json.load(open(jsonfile))
     except Exception as err:
@@ -31,6 +29,12 @@ def _aws_config(nodes,clustername,jsonfile):
     my_env['AWS_ACCESS_KEY_ID'] = json_file['aws_access_key_id']
     my_env['AWS_SECRET_ACCESS_KEY'] = json_file['aws_secret_access_key']
     my_env['AWS_DEFAULT_REGION'] = json_file['aws_region_for_openshift']
+    # Grepping cluster name from rosa list cluster again, it is needed for hosted-cp cluster(oc get infrastructure from L104 only returns clusterID)
+    # like rosa list cluster | grep 24t1h01qq8mo77nv4nhi30ek9fiii4ac | awk '{print$2}' gets perf-195-hcp-1
+    clustername_check_cmd = ["rosa list cluster | grep " + clustername + " | awk '{print$2}' "]
+    process = subprocess.Popen(clustername_check_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=my_env)
+    stdout,stderr = process.communicate()
+    clustername = stdout.decode("utf-8")
     vpc_cmd = ["aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress,PublicIpAddress, PrivateDnsName, VpcId]' --output text | column -t | grep " + clustername + "| awk '{print $7}' | grep -v '^$' | sort -u"]
     print(vpc_cmd)
     process = subprocess.Popen(vpc_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=my_env)
@@ -94,28 +98,17 @@ def main():
         help='Optional configuration file including all the dag vars')
     args = parser.parse_args()
 
-    if args.incluster.lower() == "true":
-        config.load_incluster_config()
-        k8s_config = client.Configuration()
-        k8s_client = client.api_client.ApiClient(configuration=k8s_config)
-    elif args.kubeconfig:
-        k8s_client = config.new_client_from_config(args.kubeconfig)
-    else:
-        k8s_client = config.new_client_from_config()
-
-    dyn_client = DynamicClient(k8s_client)
-    nodes = dyn_client.resources.get(api_version='v1', kind='Node')
-
     if args.kubeconfig:
         cmd = ["oc get infrastructures.config.openshift.io cluster -o jsonpath={.status.infrastructureName} --kubeconfig " + args.kubeconfig]
     else:
         cmd = ["oc get infrastructures.config.openshift.io cluster -o jsonpath={.status.infrastructureName}"]
+
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout,stderr = process.communicate()
     clustername = stdout.decode("utf-8")
 
     # AWS configuration
-    _aws_config(nodes,clustername,args.jsonfile)
+    _aws_config(clustername,args.jsonfile)
 
 
 if __name__ == '__main__':
