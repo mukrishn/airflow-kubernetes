@@ -46,5 +46,5 @@ class Diagnosis():
             dag=self.dag,
             env=env,
             executor_config=self.exec_config,
-            trigger_rule="one_failed"
+            trigger_rule="all_failed"
         )
