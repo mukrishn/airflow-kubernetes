@@ -751,12 +751,8 @@ index_mgmt_cluster_stat(){
     HCP_NAMESPACE="$(_get_cluster_id ${CLUSTER_NAME})-$CLUSTER_NAME"
     MC_PROMETHEUS=https://$(oc --kubeconfig=./mgmt_kubeconfig get route -n openshift-monitoring prometheus-k8s -o jsonpath="{.spec.host}")
     MC_PROMETHEUS_TOKEN=$(oc --kubeconfig=./mgmt_kubeconfig sa new-token -n openshift-monitoring prometheus-k8s)    
-    Q_NODES=""
-    for n in $(curl -H "Authorization: Bearer ${MC_PROMETHEUS_TOKEN}" -k --silent --globoff  ${MC_PROMETHEUS}/api/v1/query?query='sum(kube_node_role{role!~"master|infra|workload|obo"})by(node)&time='$(date +"%s")'' | jq -r '.data.result[].metric.node');
-    do
-       if [[ ${Q_NODES} == "" ]]; then Q_NODES=${n}; else Q_NODES=${Q_NODES}"|"${n}; fi
-    done
-    MGMT_WORKER_NODES=${Q_NODES}
+    Q_NODES=$(curl -H "Authorization: Bearer ${MC_PROMETHEUS_TOKEN}" -k --silent --globoff  ${MC_PROMETHEUS}/api/v1/query?query='sum(kube_node_role{role!~"master|infra|workload|obo"})by(node)&time='$(date +"%s")'' | jq -r '.data.result[].metric.node' | xargs)
+    MGMT_WORKER_NODES=${Q_NODES// /|}
     echo "Exporting required vars"
     cat << EOF
 MC_PROMETHEUS: ${MC_PROMETHEUS}
