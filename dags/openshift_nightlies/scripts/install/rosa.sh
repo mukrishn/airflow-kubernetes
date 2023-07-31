@@ -741,7 +741,7 @@ index_mgmt_cluster_stat(){
     cd /home/airflow/workspace    
     echo "Installing kube-burner"
     _download_kubeconfig "$(ocm list clusters --no-headers --columns id ${MGMT_CLUSTER_NAME})" ./mgmt_kubeconfig
-    export KUBE_BURNER_RELEASE=${KUBE_BURNER_RELEASE:-1.5}
+    export KUBE_BURNER_RELEASE=${KUBE_BURNER_RELEASE:-1.7.3}
     curl -L https://github.com/cloud-bulldozer/kube-burner/releases/download/v${KUBE_BURNER_RELEASE}/kube-burner-${KUBE_BURNER_RELEASE}-Linux-x86_64.tar.gz -o kube-burner.tar.gz
     sudo tar -xvzf kube-burner.tar.gz -C /usr/local/bin/
     git clone -q -b ${E2E_BENCHMARKING_BRANCH}  ${E2E_BENCHMARKING_REPO} --depth=1 --single-branch
