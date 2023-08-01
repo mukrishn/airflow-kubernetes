@@ -746,8 +746,16 @@ index_mgmt_cluster_stat(){
     sudo tar -xvzf kube-burner.tar.gz -C /usr/local/bin/
     git clone -q -b ${E2E_BENCHMARKING_BRANCH}  ${E2E_BENCHMARKING_REPO} --depth=1 --single-branch
     METRIC_PROFILE=/home/airflow/workspace/e2e-benchmarking/workloads/kube-burner-ocp-wrapper/metrics-profiles/mc-metrics.yml
-    envsubst < /home/airflow/workspace/e2e-benchmarking/workloads/kube-burner/workloads/managed-services/baseconfig.yml > baseconfig.yml
-    cat baseconfig.yml
+    cat > baseconfig.yml << EOF
+---
+global:
+  indexerConfig:
+    esServers: ["${ES_SERVER}"]
+    insecureSkipVerify: true
+    defaultIndex: ${ES_INDEX}
+    type: elastic
+EOF
+
     HCP_NAMESPACE="$(_get_cluster_id ${CLUSTER_NAME})-$CLUSTER_NAME"
     MC_PROMETHEUS=https://$(oc --kubeconfig=./mgmt_kubeconfig get route -n openshift-monitoring prometheus-k8s -o jsonpath="{.spec.host}")
     MC_PROMETHEUS_TOKEN=$(oc --kubeconfig=./mgmt_kubeconfig sa new-token -n openshift-monitoring prometheus-k8s)    
