@@ -753,7 +753,7 @@ global:
     esServers: ["${ES_SERVER}"]
     insecureSkipVerify: true
     defaultIndex: ${ES_INDEX}
-    type: elastic
+    type: opensearch
 EOF
 
     HCP_NAMESPACE="$(_get_cluster_id ${CLUSTER_NAME})-$CLUSTER_NAME"
