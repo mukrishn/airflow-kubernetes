@@ -689,9 +689,11 @@ index_mgmt_cluster_stat(){
     cd /home/airflow/workspace    
     echo "Installing kube-burner"
     _download_kubeconfig "$(ocm list clusters --no-headers --columns id ${MGMT_CLUSTER_NAME})" ./mgmt_kubeconfig
-    export KUBE_BURNER_RELEASE=${KUBE_BURNER_RELEASE:-1.5}
-    curl -L https://github.com/cloud-bulldozer/kube-burner/releases/download/v${KUBE_BURNER_RELEASE}/kube-burner-${KUBE_BURNER_RELEASE}-Linux-x86_64.tar.gz -o kube-burner.tar.gz
-    sudo tar -xvzf kube-burner.tar.gz -C /usr/local/bin/
+    if [[ ! $(kube-burner version) ]]; then
+        export KUBE_BURNER_RELEASE=${KUBE_BURNER_RELEASE:-1.5}
+        curl -L https://github.com/cloud-bulldozer/kube-burner/releases/download/v${KUBE_BURNER_RELEASE}/kube-burner-${KUBE_BURNER_RELEASE}-Linux-x86_64.tar.gz -o kube-burner.tar.gz
+        sudo tar -xvzf kube-burner.tar.gz -C /usr/local/bin/
+    fi
     git clone -q -b ${E2E_BENCHMARKING_BRANCH}  ${E2E_BENCHMARKING_REPO} --depth=1 --single-branch
     METRIC_PROFILE=/home/airflow/workspace/e2e-benchmarking/workloads/kube-burner-ocp-wrapper/metrics-profiles/mc-metrics.yml
     cat > baseconfig.yml << EOF
@@ -701,7 +703,7 @@ global:
     esServers: ["${ES_SERVER}"]
     insecureSkipVerify: true
     defaultIndex: ${ES_INDEX}
-    type: elastic
+    type: opensearch
 EOF
 
     HCP_NAMESPACE="$(_get_cluster_id ${CLUSTER_NAME})-$CLUSTER_NAME"
@@ -733,7 +735,7 @@ EOF
     curl -k -sS -X POST -H "Content-type: application/json" ${ES_SERVER}/${ES_INDEX}/_doc -d "${METADATA}" -o /dev/null
 
     echo "Running kube-burner index.." 
-    kube-burner index --uuid=${UUID} --prometheus-url=${MC_PROMETHEUS} --token ${MC_PROMETHEUS_TOKEN} --start=$START_TIME --end=$((END_TIME+600)) --step 2m --metrics-profile ${METRIC_PROFILE}  --config ./baseconfig.yml --log-level debug
+    kube-burner index --uuid=${UUID} --prometheus-url=${MC_PROMETHEUS} --token ${MC_PROMETHEUS_TOKEN} --start=$START_TIME --end=$((END_TIME+600)) --metrics-profile ${METRIC_PROFILE}  --config ./baseconfig.yml --log-level debug
     echo "Finished indexing results"
 }
 
