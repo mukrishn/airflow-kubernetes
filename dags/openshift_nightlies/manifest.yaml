@@ -115,7 +115,7 @@ platforms:
           benchmarks: upgrade.json
 
   rosahcp:
-    versions: ["4.12", "4.13"]
+    versions: ["4.12", "4.13", "4.14"]
     variants:
       - name: p75-control-plane
         schedule:  "0 12 * * 3"
